@@ -7,7 +7,7 @@ const server: FastifyInstance = fastify();
 server.register(fastifyCors);
 
 const routes = (server: FastifyInstance): void => {
-  server.register(userRouter, { prefix: '/admin/user' });
+  server.register(userRouter, { prefix: '/user' });
 };
 
 export default routes
