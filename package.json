@@ -7,6 +7,9 @@
     "dev": "tsx watch src/server.ts",
     "vercel-build": "npx prisma migrate deploy"
   },
+  "prisma": {
+    "schema": "src/prisma/schema.prisma"
+  },  
   "keywords": [],
   "author": "",
   "license": "ISC",
