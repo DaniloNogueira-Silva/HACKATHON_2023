@@ -22,8 +22,7 @@
     "prisma": "^5.1.0",
     "ts-node": "^10.9.1",
     "tsx": "^3.12.7",
-    "yup": "^1.2.0",
-    "lib-api-error": "^1.0.5"
+    "yup": "^1.2.0"  
   },
   "dependencies": {
     "@fastify/cors": "^8.3.0",
@@ -35,7 +34,6 @@
     "@types/nodemailer": "^6.4.9",
     "typescript": "^5.1.6",
     "@types/yup": "^0.32.0",
-    "html-pdf": "^3.0.1",
-    "lib-api-error": "^1.0.5"
+    "html-pdf": "^3.0.1"
   }
 }
