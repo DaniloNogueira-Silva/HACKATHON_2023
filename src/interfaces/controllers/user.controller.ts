@@ -51,9 +51,9 @@ export class UserController {
         return;
       }
 
-      const userId = Number(params.id);
+      
       const user: User | null = await this.repository.update(
-        userId,
+        params.id,
         userInterface
       );
 
@@ -80,8 +80,8 @@ export class UserController {
         return;
       }
 
-      const userId = Number(params.id);
-      const deleted: boolean = await this.repository.delete(userId);
+      
+      const deleted: boolean = await this.repository.delete(params.id);
 
       if (!deleted) {
         const response = apiErrorResponse("NOT_FOUND");

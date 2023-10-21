@@ -57,6 +57,7 @@ model Report {
   descricao    String
   solucionado  Boolean
   data_solucao DateTime
+  votos        Int
 
   user   User   @relation(fields: [userId], references: [id])
   userId String

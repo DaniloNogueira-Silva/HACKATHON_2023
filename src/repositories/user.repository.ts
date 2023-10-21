@@ -36,14 +36,14 @@ export class UserRepository {
     return user;
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     const deleteResult = await prisma.user.delete({
       where: { id },
     });
     return deleteResult !== null;
   }
 
-  async update(id: number, data: User): Promise<User | null> {
+  async update(id: string, data: User): Promise<User | null> {
     const user = await prisma.user.update({
       where: { id },
       data,
@@ -100,7 +100,7 @@ export class UserRepository {
 
   }
 
-  async updateToken(id: number, password: string, used: boolean): Promise<User | null> {
+  async updateToken(id: string, password: string, used: boolean): Promise<User | null> {
     const user = await prisma.user.update({
       where: { id },
       data: {
