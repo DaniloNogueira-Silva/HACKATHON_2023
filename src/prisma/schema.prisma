@@ -8,72 +8,57 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  name      String
-  email     String    @unique
-  password  String
-  token     String?
-  expiresIn DateTime?
-  used      Boolean?
-  cpf       String    @unique
-  telefone  String
-  Report    Report[]
+  id       String @id @default(uuid())
+  name     String
+  cnpj     String @unique
+  password String
+
+  empresa Empresa[]
 }
 
-model Orgao {
-  id            String  @id @default(uuid())
-  telefone      String
-  email         String  @unique
-  cnpj          String  @unique
-  governamental Boolean
-
-  types Types[]
-}
-
-model Types {
-  id      String   @id @default(uuid())
-  name    String
-  orgao   Orgao    @relation(fields: [orgaoId], references: [id])
-  orgaoId String
-  Report  Report[]
-}
-
-model Localization {
-  id        String @id @default(uuid())
-  estado    String
-  cidade    String
-  rua       String
-  cep       String
-  bairro    String
-  latitude  String
-  longitude String
-
-  Report Report[]
-}
-
-model Report {
-  id           String   @id @default(uuid())
-  created_at   DateTime @default(now())
-  descricao    String
-  solucionado  Boolean
-  data_solucao DateTime
-  votos        Int
+model Empresa {
+  id               String @id @default(uuid())
+  nrm_funcionarios String
+  tamanho_empresa  String
+  estado           String
+  imovel           String
+  nota             Float
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  tipos  Types  @relation(fields: [tipoId], references: [id])
-  tipoId String
-
-  localizacoes  Localization @relation(fields: [localizacaoId], references: [id])
-  localizacaoId String
-
-  images Image[]
+  energia  Energia[]
+  agua     Agua[]
+  residuos Residuos[]
 }
 
-model Image {
-  id      String @id @default(uuid())
-  path    String
-  reports Report @relation(fields: [postId], references: [id])
-  postId  String
+model Energia {
+  id               String @id @default(uuid())
+  watts_mes        Float
+  watts_dia        Float
+  nivel            String
+  fonte_de_energia String
+
+  empresa   Empresa @relation(fields: [empresaId], references: [id])
+  empresaId String
+}
+
+model Agua {
+  id         String @id @default(uuid())
+  litros_mes Float
+  litros_dia Float
+  nivel      String
+
+  empresa   Empresa @relation(fields: [empresaId], references: [id])
+  empresaId String
+}
+
+model Residuos {
+  id         String @id @default(uuid())
+  nome       String
+  quantidade Int
+  nivel      String
+
+  empresa   Empresa @relation(fields: [empresaId], references: [id])
+  empresaId String
 }
