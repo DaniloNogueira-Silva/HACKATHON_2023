@@ -9,15 +9,15 @@ export class UserRepository {
   }
 
   async create(data: User): Promise<User> {
-    const { email, password, ...userData } = data;
+    const { cnpj, password, ...userData } = data;
 
-    // Verifica se já existe um usuário com o mesmo email no banco
+    // Verifica se já existe um usuário com o mesmo cnpj no banco
     const existingUser = await prisma.user.findUnique({
-      where: { email },
+      where: { cnpj },
     });
 
     if (existingUser) {
-      throw new Error("User with this email already exists");
+      throw new Error("User with this cnpj already exists");
     }
 
     const saltRounds = 10;
@@ -28,7 +28,7 @@ export class UserRepository {
     const user = await prisma.user.create({
       data: {
         ...userData,
-        email,
+        cnpj,
         password: hashedPassword, // Aqui a senha hasheada é armazenada no banco
       },
     });
@@ -54,10 +54,10 @@ export class UserRepository {
     return user;
   }
 
-  async login(email: string): Promise<User | null> {
+  async login(cnpj: string): Promise<User | null> {
 
     const user = await prisma.user.findUnique({
-      where: { email },
+      where: { cnpj },
     });
 
     if (!user) {
@@ -66,9 +66,9 @@ export class UserRepository {
     return user;
   }
 
-  async recoverPassword(email: string, token: string, used: boolean, expiresIn: Date): Promise<User | null> {
+  async recoverPassword(cnpj: string, token: string, used: boolean, expiresIn: Date): Promise<User | null> {
     const user = await prisma.user.findUnique({
-      where: { email },
+      where: { cnpj },
     });
 
     if (!user) {
@@ -76,7 +76,7 @@ export class UserRepository {
     }
 
     await prisma.user.update({
-      where: { email },
+      where: { cnpj },
       data: {
         token: token,
         expiresIn: expiresIn,
