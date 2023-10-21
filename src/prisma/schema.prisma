@@ -26,10 +26,10 @@ model Orgao {
   cnpj          String  @unique
   governamental Boolean
 
-  types Tipo[]
+  types Types[]
 }
 
-model Tipo {
+model Types {
   id   String @id @default(uuid())
   name String
   orgao     Orgao     @relation(fields: [orgaoId], references: [id])
