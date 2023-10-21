@@ -2,7 +2,7 @@ import { PrismaClient, Empresa } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export class EmpresaRepostirory {
+export class EmpresaRepository {
   async findAll(): Promise<Empresa[]> {
     return prisma.empresa.findMany();
   }
@@ -13,7 +13,7 @@ export class EmpresaRepostirory {
     });
   }
 
-  async create(data: Empresa): Promise<Empresa> {
+  async  create(data: Empresa): Promise<Empresa> {
     const { userId, ...empresaData } = data;
 
     const existingEmpresa = await prisma.empresa.findUnique({

@@ -21,8 +21,7 @@ model User {
 
 model Empresa {
   id               String @id @default(uuid())
-  nrm_funcionarios String
-  tamanho_empresa  String
+  nrm_funcionarios Int
   estado           String
   imovel           String
   nota             Float
