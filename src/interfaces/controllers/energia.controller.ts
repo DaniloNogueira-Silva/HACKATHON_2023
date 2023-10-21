@@ -25,6 +25,18 @@ export class EnergiaController {
       res.status(response.code).send(response);
     }
   };
+  
+  calcularEnergia: RequestHandler = async (req, res) => {
+    try {
+      const calculateInterface = req.body;
+      const calculate = await this.repository.calculateDemo(calculateInterface)
+      res.send(calculate);
+    } catch (error) {
+      console.log(error)
+      const response = apiErrorResponse("INVALID_INPUT");
+      res.status(response.code).send(response);
+    }
+  };
 
   create: RequestHandler = async (req, res) => {
     try {
@@ -48,7 +60,6 @@ export class EnergiaController {
         return;
       }
 
-      
       const energia: Energia | null = await this.repository.update(
         params.id,
         energiaInterface
@@ -77,7 +88,6 @@ export class EnergiaController {
         return;
       }
 
-      
       const deleted: boolean = await this.repository.delete(params.id);
 
       if (!deleted) {
@@ -88,9 +98,8 @@ export class EnergiaController {
 
       res.code(204).send();
     } catch (error) {
-        const response = apiErrorResponse("INTERNAL_ERROR");
-        res.status(response.code).send(response);
+      const response = apiErrorResponse("INTERNAL_ERROR");
+      res.status(response.code).send(response);
     }
   };
-
 }

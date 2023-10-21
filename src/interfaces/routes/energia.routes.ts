@@ -21,6 +21,12 @@ const energiaRouter = (server: FastifyInstance, options: any, done: () => void) 
       done();
   });
 
+  server.post('/calculate', async (req: FastifyRequest, reply: FastifyReply) => {
+    await energiaController.calcularEnergia(req, reply);
+    reply.status(201).send(`calculo realizado`)
+    done();
+});
+
   server.put<{ Params: { id: string } }>('/:id', async (req, reply) => {
       await energiaController.update(req, reply);
       reply.status(200).send(`user updated`);
