@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-    id      String   @id @default(uuid())
+  id        String    @id @default(uuid())
   name      String
   email     String    @unique
   password  String
@@ -48,7 +48,7 @@ model Localization {
   latitude  String
   longitude String
 
-  Report  Report[]
+  Report Report[]
 }
 
 model Report {
@@ -64,7 +64,7 @@ model Report {
   tipos  Types  @relation(fields: [tipoId], references: [id])
   tipoId String
 
-  localizacoes  Localization  @relation(fields: [localizacaoId], references: [id])
+  localizacoes  Localization @relation(fields: [localizacaoId], references: [id])
   localizacaoId String
 
   images Image[]
