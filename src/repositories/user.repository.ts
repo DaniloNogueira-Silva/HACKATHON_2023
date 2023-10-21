@@ -9,15 +9,15 @@ export class UserRepository {
   }
 
   async create(data: User): Promise<User> {
-    const { cnpj, password, ...userData } = data;
-
+    const { email, cnpj = 'não há cnpj', password, ...userData } = data;
+    
     // Verifica se já existe um usuário com o mesmo cnpj no banco
     const existingUser = await prisma.user.findUnique({
-      where: { cnpj },
+      where: { email },
     });
 
     if (existingUser) {
-      throw new Error("User with this cnpj already exists");
+      throw new Error("User with this email already exists");
     }
 
     const saltRounds = 10;
@@ -28,6 +28,7 @@ export class UserRepository {
     const user = await prisma.user.create({
       data: {
         ...userData,
+        email,
         cnpj,
         password: hashedPassword, // Aqui a senha hasheada é armazenada no banco
       },

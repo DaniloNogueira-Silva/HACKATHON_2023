@@ -25,6 +25,17 @@ export class EnergiaController {
       res.status(response.code).send(response);
     }
   };
+
+  findAllByEmpresa: RequestHandler = async (req, res) => {
+    try {
+      const params = req.params as { id: string };
+      const energia: Energia[] = await this.repository.findAllByCompanie(params.id);
+      res.send(energia);
+    } catch (error) {
+      const response = apiErrorResponse("NOT_FOUND");
+      res.status(response.code).send(response);
+    }
+  };
   
   calcularEnergia: RequestHandler = async (req, res) => {
     try {
@@ -40,10 +51,13 @@ export class EnergiaController {
 
   create: RequestHandler = async (req, res) => {
     try {
-      const energiaInterface: Energia = req.body as Energia;
+      const energiaInterface = req.body
+      console.log(energiaInterface)
       const energia: Energia = await this.repository.create(energiaInterface);
+      console.log(energia)
       res.send(energia);
     } catch (error) {
+      console.log(error)
       const response = apiErrorResponse("INVALID_INPUT");
       res.status(response.code).send(response);
     }

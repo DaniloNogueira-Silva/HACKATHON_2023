@@ -1,10 +1,32 @@
 import { PrismaClient, Energia } from "@prisma/client";
+import { EmpresaRepository } from "./empresa.repository";
 
 const prisma = new PrismaClient();
 
 export class EnergiaRepository {
+  repository: EmpresaRepository;
+
+  constructor(repository: EmpresaRepository) {
+    this.repository = repository;
+  }
+
   async findAll(): Promise<Energia[]> {
     return prisma.energia.findMany();
+  }
+
+  async findAllByCompanie(empresaId: string): Promise<Energia[]> {
+    const findEnergies = await prisma.energia.findMany({
+      where: { empresaId: empresaId },
+    });
+  
+    return findEnergies;
+  }
+  
+
+  async findById(id: string): Promise<Energia> {
+    return prisma.energia.findUnique({
+      where: { id },
+    });
   }
 
   async getTaxa(data) {
@@ -39,7 +61,7 @@ export class EnergiaRepository {
       maximo = 1200;
     }
 
-    return maximo
+    return maximo;
   }
 
   async calculateDemo(data: any) {
@@ -49,7 +71,7 @@ export class EnergiaRepository {
 
     const wattsByFunc = await this.wattsByFuncionario(data);
 
-    let conversion
+    let conversion;
     if (getTaxa.estadoEscolhido) {
       conversion = data.valor / getTaxa.taxa;
 
@@ -57,7 +79,7 @@ export class EnergiaRepository {
         nivel = "abaixo";
       } else if (conversion == wattsByFunc) {
         nivel = "na média";
-      } else if (conversion > wattsByFunc){
+      } else if (conversion > wattsByFunc) {
         nivel = "mais alto";
       }
 
@@ -66,12 +88,58 @@ export class EnergiaRepository {
     }
   }
 
-  async create(data: Energia): Promise<Energia> {
-    const { ...energiaData } = data;
+  async getWatts(data: any) {
+    let nivel: string;
+
+    const findDetails = await this.repository.findById(data.empresaId);
+
+    const getTaxa = await this.getTaxa({
+      funcionarios: findDetails.estado,
+      ...data,
+    });
+
+    const wattsByFunc = await this.wattsByFuncionario({
+      funcionarios: findDetails.nrm_funcionarios,
+      ...data,
+    });
+
+    let conversion;
+    if (getTaxa.estadoEscolhido) {
+      conversion = data.valor / getTaxa.taxa;
+
+      if (conversion < wattsByFunc) {
+        nivel = "abaixo";
+      } else if (conversion == wattsByFunc) {
+        nivel = "na média";
+      } else if (conversion > wattsByFunc) {
+        nivel = "mais alto";
+      }
+    }
+
+    const watts_dia = conversion / 30;
+
+    return {
+      watts_mes: Number(conversion.toFixed(2)),
+      watts_dia: Number(watts_dia.toFixed(2)),
+      nivel: nivel,
+    };
+  }
+
+  async create(data): Promise<any> {
+    const wattsConvert = await this.getWatts(data);
+
+    const wattsMes = wattsConvert.watts_mes;
+    const wattsDia = wattsConvert.watts_dia;
+    const wattsNivel = wattsConvert.nivel;
+    const fonteEnergia = "padrão";
 
     const energia = await prisma.energia.create({
       data: {
-        ...energiaData,
+        fonte_de_energia: fonteEnergia,
+        watts_mes: wattsMes,
+        watts_dia: wattsDia,
+        nivel: wattsNivel,
+        empresaId: data.empresaId,
       },
     });
 
