@@ -15,4 +15,23 @@ model User {
   token     String?
   expiresIn DateTime?
   used      Boolean?
+  cpf       String    @unique
+  telefone  String
+}
+
+model Orgao {
+  id            String  @id @default(uuid())
+  telefone      String
+  email         String  @unique
+  cnpj          String  @unique
+  governamental Boolean
+
+  types Tipo[]
+}
+
+model Tipo {
+  id   String @id @default(uuid())
+  name String
+  orgao     Orgao     @relation(fields: [orgaoId], references: [id])
+  orgaoId   String
 }
