@@ -51,7 +51,7 @@ export class UserController {
         return;
       }
 
-      
+
       const user: User | null = await this.repository.update(
         params.id,
         userInterface
@@ -80,7 +80,7 @@ export class UserController {
         return;
       }
 
-      
+
       const deleted: boolean = await this.repository.delete(params.id);
 
       if (!deleted) {
@@ -91,8 +91,8 @@ export class UserController {
 
       res.code(204).send();
     } catch (error) {
-        const response = apiErrorResponse("INTERNAL_ERROR");
-        res.status(response.code).send(response);
+      const response = apiErrorResponse("INTERNAL_ERROR");
+      res.status(response.code).send(response);
     }
   };
 
@@ -123,9 +123,8 @@ export class UserController {
 
       res.status(200).send({ token: token });
     } catch (error) {
-        const response = apiErrorResponse("INTERNAL_ERROR");
-        res.status(response.code).send(response);
-      console.log(error);
+      const response = apiErrorResponse("INTERNAL_ERROR");
+      res.status(response.code).send(response);
     }
   };
 
@@ -170,8 +169,8 @@ export class UserController {
 
       res.status(200).send({ token });
     } catch (error) {
-        const response = apiErrorResponse("INTERNAL_ERROR");
-        res.status(response.code).send(response);
+      const response = apiErrorResponse("INTERNAL_ERROR");
+      res.status(response.code).send(response);
     }
   };
 
@@ -206,9 +205,8 @@ export class UserController {
         res.status(response.code).send(response);
       }
     } catch (error) {
-        const response = apiErrorResponse("INTERNAL_ERROR");
-        res.status(response.code).send(response);
-      console.log(error);
+      const response = apiErrorResponse("INTERNAL_ERROR");
+      res.status(response.code).send(response);
     }
   };
 }

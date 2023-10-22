@@ -3,6 +3,7 @@ import { AguaRepository } from "../../repositories/agua.repository";
 import { Agua } from "@prisma/client";
 
 import { apiErrorResponse } from "../../helpers/errors/index";
+import { EmpresaRepository } from "../../repositories/empresa.repository";
 
 type MyRequest = FastifyRequest;
 type MyReply = FastifyReply;
@@ -11,6 +12,7 @@ type RequestHandler = (req: MyRequest, res: MyReply) => Promise<void>;
 
 export class AguaController {
   repository: AguaRepository;
+  empresaRepository: EmpresaRepository
 
   constructor(repository: AguaRepository) {
     this.repository = repository;
@@ -28,8 +30,9 @@ export class AguaController {
 
   create: RequestHandler = async (req, res) => {
     try {
-      const aguaInterface: Agua = req.body as Agua;
-      const agua: Agua = await this.repository.create(aguaInterface);
+      const aguaInterface = req.body;
+      const agua = await this.repository.create(aguaInterface);
+      
       res.send(agua);
     } catch (error) {
       const response = apiErrorResponse("INVALID_INPUT");
@@ -48,7 +51,6 @@ export class AguaController {
         return;
       }
 
-      
       const agua: Agua | null = await this.repository.update(
         params.id,
         aguaInterface
@@ -77,7 +79,6 @@ export class AguaController {
         return;
       }
 
-      
       const deleted: boolean = await this.repository.delete(params.id);
 
       if (!deleted) {
@@ -88,9 +89,38 @@ export class AguaController {
 
       res.code(204).send();
     } catch (error) {
-        const response = apiErrorResponse("INTERNAL_ERROR");
-        res.status(response.code).send(response);
+      const response = apiErrorResponse("INTERNAL_ERROR");
+      res.status(response.code).send(response);
     }
   };
 
+  calcularAgua: RequestHandler = async (req, res) => {
+    try {
+      const aguaInterface: Agua = req.body as Agua;
+      const calculate = await this.repository.calculate(aguaInterface)
+      res.send(calculate);
+    } catch (error) {
+      const response = apiErrorResponse("INVALID_INPUT");
+      res.status(response.code).send(response);
+    }
+  };
+
+  getAllAguaById: RequestHandler = async (req, res) => {
+    try {
+      const params = req.params as { id: string };
+      
+      if (typeof params.id !== "string") {
+        const response = apiErrorResponse("INVALID_INPUT");
+        res.status(response.code).send(response);
+        return;
+      }
+      
+      const agua = await this.repository.getAllAguaById(params.id)
+      res.send(agua);
+    } catch (error) {
+      
+      const response = apiErrorResponse("INVALID_INPUT");
+      res.status(response.code).send(response);
+    }
+  };
 }
