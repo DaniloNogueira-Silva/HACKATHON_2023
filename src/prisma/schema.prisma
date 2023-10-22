@@ -62,6 +62,7 @@ model Residuos {
   nome       String
   quantidade Int
   nivel      String
+  createdAt  DateTime @default(now())
 
   empresa   Empresa @relation(fields: [empresaId], references: [id])
   empresaId String
