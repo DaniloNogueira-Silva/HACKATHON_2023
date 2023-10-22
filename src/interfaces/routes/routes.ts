@@ -5,6 +5,7 @@ import energiaRouter from './energia.routes';
 import aguaRouter from './agua.routes';
 import fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
+import residuosRouter from './residuos.routes';
 
 const server: FastifyInstance = fastify();
 server.register(fastifyCors);
@@ -14,6 +15,7 @@ const routes = (server: FastifyInstance): void => {
   server.register(EmpresaRouter, { prefix: '/empresa' });
   server.register(energiaRouter, { prefix: '/energia' });
   server.register(aguaRouter, { prefix: '/agua' });
+  server.register(residuosRouter, { prefix: '/residuos' });
 };
 
 export default routes
